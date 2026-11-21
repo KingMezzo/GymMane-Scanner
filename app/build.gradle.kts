@@ -1,4 +1,4 @@
-﻿import java.util.Properties
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -20,8 +20,8 @@ android {
         applicationId = "de.gymmane.scanner"
         minSdk = 26
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.3.4"
+        versionCode = 10
+        versionName = "2.0.0"
         buildConfigField("String", "REPOSITORY_URL", "\"${providers.gradleProperty("scanner.repositoryUrl").getOrElse("")}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

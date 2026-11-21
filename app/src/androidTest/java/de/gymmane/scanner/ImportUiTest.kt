@@ -14,17 +14,23 @@ import de.gymmane.scanner.ui.theme.GymManeTheme
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Assume.assumeTrue
+import org.junit.Before
+import de.gymmane.scanner.i18n.T
 import org.junit.Rule
 import org.junit.Test
 
 class ImportUiTest {
     @get:Rule val compose = createComposeRule()
 
+    @Before fun configureLanguage() {
+        T.configure(InstrumentationRegistry.getInstrumentation().targetContext, "de")
+    }
+
     @Test fun primarySendButtonUsesProductWithoutChangingPer100() {
         var sent: Product? = null
         val product = Product("test", name = "Test", servingAmount = 33.333333, servingLabel = "1 Stück",
             per100 = Nutrients(200.0, 2.5, 10.0, 5.0))
-        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
+        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { selected, quick -> assertFalse(quick); sent = selected }) } }
         compose.onNodeWithText("Als neues Lebensmittel importieren").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(product, sent) }
     }
@@ -52,7 +58,7 @@ class ImportUiTest {
         var sent: Product? = null
         val product = Product("can", name = "Drink", servingAmount = 500.0, servingLabel = "1 Dose",
             unit = QuantityUnit.ML, per100 = Nutrients(2.0, 0.0, .9, 0.0))
-        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
+        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { selected, quick -> assertFalse(quick); sent = selected }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Portionsgröße in ml").performScrollTo().performTextReplacement("250")
         compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()
@@ -68,7 +74,7 @@ class ImportUiTest {
         var sent: Product? = null
         val product = Product("can", name = "Drink", servingAmount = 500.0, servingLabel = "500 ml",
             unit = QuantityUnit.ML, per100 = Nutrients(2.0, 0.0, .9, 0.0))
-        compose.setContent { GymManeTheme { ProductScreen(product, true, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
+        compose.setContent { GymManeTheme { ProductScreen(product, true, false, null, { _, _ -> }, {}, {}, {}, { selected, quick -> assertFalse(quick); sent = selected }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Bezeichnung, z. B. 1 Messlöffel").performScrollTo().performTextReplacement("1 Dose")
         compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()
@@ -83,7 +89,7 @@ class ImportUiTest {
         var sent: Product? = null
         val product = Product("can", name = "Drink", servingAmount = 500.0, servingLabel = "1 Dose",
             unit = QuantityUnit.ML, per100 = Nutrients(2.0, 0.0, .9, 0.0))
-        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
+        compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { selected, quick -> assertFalse(quick); sent = selected }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Portionsgröße in ml").performScrollTo().performTextClearance()
         compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()

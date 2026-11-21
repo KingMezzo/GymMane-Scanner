@@ -18,5 +18,5 @@
     <string name="update_permission_denied">Installation is not allowed. Start the update again and allow installations from this source.</string>
     <string name="update_install_failed">Could not open the Android installer. Please start the update again.</string>
     <string name="update_no_notes">No release notes were provided for this version.</string>
-    <string name="update_local_notes">Check for updates inside the app and install them using the Android installer. Settings now include automatic and manual update checks.</string>
+    <string name="update_local_notes">New in 2.0.0:\n• On-device barcode scanning with ZXing instead of ML Kit.\n• Product names and categories follow the app language.\n• Refreshed scanner, history, settings and onboarding with Nunito typography.\n• Clearer product details, nutrition values and manual entry forms.\n• Restyled dialogs and the What’s new screen.\n• New option to send nutrition values to GymMane Quick add (requires a compatible GymMane version).\n• Nunito font credit moved to the README.\nThanks to @InlitX for PRs #1–#9!</string>
 </resources>

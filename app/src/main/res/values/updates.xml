@@ -18,5 +18,5 @@
     <string name="update_permission_denied">Installation nicht erlaubt. Du kannst das Update erneut starten und die Installation aus dieser Quelle erlauben.</string>
     <string name="update_install_failed">Der Android-Installer konnte nicht geöffnet werden. Bitte das Update erneut starten.</string>
     <string name="update_no_notes">Für diese Version wurden keine Versionshinweise hinterlegt.</string>
-    <string name="update_local_notes">Updates lassen sich jetzt direkt in der App prüfen und über den Android-Installer installieren. Die Einstellungen enthalten eine automatische und eine manuelle Updateprüfung.</string>
+    <string name="update_local_notes">New in 2.0.0:\n• On-device barcode scanning with ZXing instead of ML Kit.\n• Product names and categories follow the app language.\n• Refreshed scanner, history, settings and onboarding with Nunito typography.\n• Clearer product details, nutrition values and manual entry forms.\n• Restyled dialogs and the What’s new screen.\n• New option to send nutrition values to GymMane Quick add (requires a compatible GymMane version).\n• Nunito font credit moved to the README.\nThanks to @InlitX for PRs #1–#9!</string>
 </resources>
