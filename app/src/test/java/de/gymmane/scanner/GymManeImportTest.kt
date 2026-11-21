@@ -112,4 +112,11 @@ class GymManeImportTest {
         val noName = ProductJson.fromApi("""{"status":1,"product":{}}""", "123")
         assertFalse(noName.nameKnown)
     }
+    @Test fun `values only adds the quick mode and keeps the same food`() {
+        val full = JSONObject(GymManeImport.serialize(product))
+        val quick = JSONObject(GymManeImport.serialize(product, quick = true))
+        assertFalse(full.has("mode"))
+        assertEquals("quick", quick.getString("mode"))
+        assertEquals(full.getJSONObject("food").toString(), quick.getJSONObject("food").toString())
+    }
 }

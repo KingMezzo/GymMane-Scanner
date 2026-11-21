@@ -15,7 +15,7 @@ object GymManeImport {
         return (listOf(name) + missingBrands).filter(String::isNotBlank).joinToString(" · ")
     }
 
-    fun serialize(product: Product): String {
+    fun serialize(product: Product, quick: Boolean = false): String {
         val n = product.per100
         fun Double?.known() = this != null && isFinite() && this >= 0
         val missing = buildList {
@@ -38,7 +38,7 @@ object GymManeImport {
         }
         val amount = product.servingAmount ?: 100.0
         val serving = Serving.name(product)
-        return JSONObject().put("gymmane", "gymmane-food").put("v", 1).put("food", JSONObject()
+        return JSONObject().put("gymmane", "gymmane-food").put("v", 1).apply { if (quick) put("mode", "quick") }.put("food", JSONObject()
             .put("name", foodName(product)).put("serving_name", serving).put("grams", amount)
             .put("liquid", product.unit == QuantityUnit.ML).put("per100", per100)).toString()
     }

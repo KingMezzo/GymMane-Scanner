@@ -25,7 +25,7 @@ class ImportUiTest {
         val product = Product("test", name = "Test", servingAmount = 33.333333, servingLabel = "1 Stück",
             per100 = Nutrients(200.0, 2.5, 10.0, 5.0))
         compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
-        compose.onNodeWithText("An GymMane senden").assertIsDisplayed().performClick()
+        compose.onNodeWithText("Als neues Lebensmittel importieren").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(product, sent) }
     }
 
@@ -55,7 +55,7 @@ class ImportUiTest {
         compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Portionsgröße in ml").performScrollTo().performTextReplacement("250")
-        compose.onNodeWithText("An GymMane senden").performClick()
+        compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()
         compose.runOnIdle {
             val f = JSONObject(GymManeImport.serialize(sent!!)).getJSONObject("food")
             assertEquals("1 Portion", f.getString("serving_name"))
@@ -71,7 +71,7 @@ class ImportUiTest {
         compose.setContent { GymManeTheme { ProductScreen(product, true, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Bezeichnung, z. B. 1 Messlöffel").performScrollTo().performTextReplacement("1 Dose")
-        compose.onNodeWithText("An GymMane senden").performClick()
+        compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()
         compose.runOnIdle {
             val f = JSONObject(GymManeImport.serialize(sent!!)).getJSONObject("food")
             assertEquals("1 Dose", f.getString("serving_name"))
@@ -86,7 +86,7 @@ class ImportUiTest {
         compose.setContent { GymManeTheme { ProductScreen(product, false, false, null, { _, _ -> }, {}, {}, {}, { sent = it }) } }
         compose.onNodeWithText("Portion & Produktdetails").performScrollTo().performClick()
         compose.onNodeWithText("Portionsgröße in ml").performScrollTo().performTextClearance()
-        compose.onNodeWithText("An GymMane senden").performClick()
+        compose.onNodeWithText("Als neues Lebensmittel importieren").performClick()
         compose.runOnIdle {
             assertNull(sent!!.servingAmount)
             val f = JSONObject(GymManeImport.serialize(sent!!)).getJSONObject("food")

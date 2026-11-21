@@ -164,7 +164,7 @@ fun ScannerApp(viewModel: ScannerViewModel, updates: UpdateViewModel) {
                 Screen.PRODUCT -> state.product?.let { product ->
                     ProductScreen(product, state.cached, state.loading, state.error, copy,
                         { product.barcode?.let { viewModel.lookup(it, refresh = true) } },
-                        { viewModel.navigate(if (state.screen == Screen.SETTINGS) previousScreen else Screen.SCAN) }, { viewModel.manual(product) }, onSend = viewModel::send)
+                        { viewModel.navigate(if (state.screen == Screen.SETTINGS) previousScreen else Screen.SCAN) }, { viewModel.manual(product) }, onSend = { product, quick -> viewModel.send(product, quick) })
                 }
                 Screen.MANUAL -> ManualScreen(state.editing, state.lastBarcode, state.loading, state.error, viewModel::save,
                     { viewModel.navigate(if (state.screen == Screen.SETTINGS) previousScreen else Screen.SCAN) }, forSending = state.editingForSend)

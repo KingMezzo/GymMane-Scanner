@@ -65,7 +65,7 @@ private fun MissingImage() {
 }
 
 @Composable
-fun ProductScreen(product: Product, cached: Boolean, loading: Boolean, error: String?, onCopy: (String, String) -> Unit, onRefresh: () -> Unit, onScan: () -> Unit, onEdit: () -> Unit, onSend: ((Product) -> Unit)? = null) {
+fun ProductScreen(product: Product, cached: Boolean, loading: Boolean, error: String?, onCopy: (String, String) -> Unit, onRefresh: () -> Unit, onScan: () -> Unit, onEdit: () -> Unit, onSend: ((Product, Boolean) -> Unit)? = null) {
     var portion by rememberSaveable(product.id) { mutableStateOf(false) }
     var amountText by rememberSaveable(product.id, product.fetchedAt) { mutableStateOf(product.servingAmount?.let(T::number).orEmpty()) }
     val originalServing = T.text(Serving.name(product))
@@ -150,12 +150,17 @@ fun ProductScreen(product: Product, cached: Boolean, loading: Boolean, error: St
                 textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) }
         }
         if (onSend != null) Surface(color = Background) {
-            PrimaryButton(T.text("An GymMane senden"), {
-                val selected = product.copy(
+            val selected = {
+                product.copy(
                     servingAmount = if (amountText == product.servingAmount?.let(T::number).orEmpty()) product.servingAmount else amount,
                     servingLabel = Serving.label(servingText))
-                onSend(selected)
-            }, Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp, vertical = 12.dp), enabled = !loading && !invalid, icon = Icons.AutoMirrored.Outlined.Send)
+            }
+            Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 4.dp)) {
+                PrimaryButton(T.text("An GymMane senden"), { onSend(selected(), false) }, Modifier.fillMaxWidth(), enabled = !loading && !invalid, icon = Icons.AutoMirrored.Outlined.Send)
+                TextButton(onClick = { onSend(selected(), true) }, enabled = !loading && !invalid, modifier = Modifier.fillMaxWidth()) {
+                    Text(T.text("Nur Nährwerte senden"), style = MaterialTheme.typography.labelLarge, color = Muted)
+                }
+            }
         }
     }
 }

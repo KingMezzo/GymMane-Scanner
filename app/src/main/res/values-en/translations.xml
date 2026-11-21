@@ -41,7 +41,7 @@
     <string name="text_updating">Updating…</string>
     <string name="text_refresh_data">Refresh data</string>
     <string name="text_manual_entry">Manual entry</string>
-    <string name="text_share_with_gymmane">Share with GymMane</string>
+    <string name="text_share_with_gymmane">Import as new food</string>
     <string name="text_search_name_or_barcode">Search name or barcode</string>
     <string name="text_clear_search">Clear search</string>
     <string name="text_no_saved_foods_yet">No saved foods yet</string>
@@ -146,4 +146,5 @@
     <string name="text_could_not_share_this_food_please_try_again">Could not share this food. Please try again.</string>
     <string name="text_share_with_gymmane_t137">Share with GymMane</string>
     <string name="text_history_note">The last 100 scanned products and all manual entries are stored on this device. Tap a product to copy its values.</string>
+    <string name="text_send_values_only">Quick add</string>
 </resources>

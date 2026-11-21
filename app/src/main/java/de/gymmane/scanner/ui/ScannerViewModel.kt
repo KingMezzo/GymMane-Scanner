@@ -121,9 +121,9 @@ class ScannerViewModel(private val repository: ProductStore, private val setting
         mutableState.update { it.copy(autoSend = enabled) }
     }
 
-    fun send(product: Product) {
+    fun send(product: Product, quick: Boolean = false) {
         try {
-            val json = GymManeImport.serialize(product)
+            val json = GymManeImport.serialize(product, quick)
             val request = PendingGymManeSend(++nextSendId, json)
             mutableState.update { it.copy(pendingSend = request, error = null,
                 correction = null, correctionError = null) }
