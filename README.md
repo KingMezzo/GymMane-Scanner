@@ -54,6 +54,7 @@ GymMane Scanner is a tiny Android app that turns the barcode on any food package
 - Android only.
 - Nutrition data depends on what is available for each product. If something looks off, double-check it against the package before saving.
 - This is a hobby project, built for my own needs and shared in case it helps someone else.
+- The app uses the [Nunito](https://github.com/googlefonts/nunito) font (SIL Open Font License 1.1).
 
 ---
 
