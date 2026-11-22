@@ -87,14 +87,19 @@ fun UpdateSettings(viewModel: UpdateViewModel) {
 @Composable
 fun UpdateOffer(viewModel: UpdateViewModel, allowed: Boolean) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    UpdateOffer(state, allowed, viewModel::later, viewModel::update)
+}
+
+@Composable
+internal fun UpdateOffer(state: UpdateState, allowed: Boolean, onLater: () -> Unit, onUpdate: () -> Unit) {
     MotionDialog(state.offer?.takeIf { allowed }) { release, motion ->
-        AlertDialog(modifier = motion, containerColor = Surface, onDismissRequest = viewModel::later,
+        AlertDialog(modifier = motion, containerColor = Surface, onDismissRequest = onLater,
             title = { Text(stringResource(R.string.update_available, release.tag)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     SectionLabel(stringResource(R.string.update_whats_new))
-                    Text(release.notes.ifBlank { stringResource(R.string.update_no_notes) }.take(30_000),
-                        Modifier.heightIn(max = 280.dp).verticalScroll(rememberScrollState()), color = Muted, style = MaterialTheme.typography.bodyMedium)
+                    ReleaseNotes(release.notes.ifBlank { stringResource(R.string.update_no_notes) },
+                        Modifier.heightIn(max = 280.dp).verticalScroll(rememberScrollState()), color = Muted)
                     if (state.downloading) {
                         LinearProgressIndicator(progress = { state.progress }, modifier = Modifier.fillMaxWidth(), color = Apricot, trackColor = Field)
                         Text(stringResource(R.string.update_downloading), style = MaterialTheme.typography.bodySmall)
@@ -102,8 +107,8 @@ fun UpdateOffer(viewModel: UpdateViewModel, allowed: Boolean) {
                     state.downloadError?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error) }
                 }
             },
-            confirmButton = { DialogConfirm(stringResource(R.string.update_action), viewModel::update, enabled = !state.downloading) },
-            dismissButton = { DialogDismiss(stringResource(R.string.update_later), viewModel::later) })
+            confirmButton = { DialogConfirm(stringResource(R.string.update_action), onUpdate, enabled = !state.downloading) },
+            dismissButton = { DialogDismiss(stringResource(R.string.update_later), onLater) })
     }
 }
 
@@ -120,8 +125,13 @@ fun WhatsNewScreen(state: UpdateState, onContinue: () -> Unit) {
                 Text(stringResource(R.string.update_whats_new), style = MaterialTheme.typography.headlineLarge)
                 Box(Modifier.fillMaxWidth().weight(1f).padding(top = 20.dp)) {
                     Surface(Modifier.fillMaxWidth(), color = Surface, shape = RoundedCornerShape(24.dp)) {
-                        Text(state.notes?.takeIf { it.isNotBlank() }?.take(30_000) ?: stringResource(R.string.update_local_notes),
-                            Modifier.verticalScroll(rememberScrollState()).padding(20.dp), style = MaterialTheme.typography.bodyMedium)
+                        val notesModifier = Modifier.verticalScroll(rememberScrollState()).padding(20.dp)
+                        val notes = state.notes?.takeIf { it.isNotBlank() }
+                        if (notes != null) {
+                            ReleaseNotes(notes, notesModifier)
+                        } else {
+                            Text(stringResource(R.string.update_local_notes), notesModifier, style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
                 PrimaryButton(stringResource(R.string.update_done), onContinue, Modifier.fillMaxWidth().padding(top = 16.dp))

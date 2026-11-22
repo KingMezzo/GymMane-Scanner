@@ -43,6 +43,7 @@ service_account*.json
 
 # Release archives and R8 mappings stay local; APKs belong in GitHub Releases
 /artifacts/
+/releases/
 *.apk
 *.aab
 *.apks

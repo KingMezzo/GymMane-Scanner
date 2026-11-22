@@ -1,3 +1,4 @@
+import com.android.build.api.artifact.SingleArtifact
 import java.util.Properties
 
 plugins {
@@ -20,8 +21,8 @@ android {
         applicationId = "de.gymmane.scanner"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "2.0.0"
+        versionCode = 11
+        versionName = "2.1.0"
         buildConfigField("String", "REPOSITORY_URL", "\"${providers.gradleProperty("scanner.repositoryUrl").getOrElse("")}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +53,25 @@ android {
 
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 
+// Export each assembled release to the project root, retaining earlier versions.
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        val versionName = variant.outputs.single().versionName
+        val exportApk = tasks.register<Copy>("exportReleaseApk") {
+            group = "build"
+            description = "Copies the release APK to releases with its version in the filename."
+            from(variant.artifacts.get(SingleArtifact.APK)) {
+                include("*.apk")
+                rename { "GymManeScanner-${versionName.get()}-release.apk" }
+            }
+            into(rootProject.layout.projectDirectory.dir("releases"))
+        }
+        tasks.matching { it.name == "assembleRelease" }.configureEach {
+            dependsOn(exportApk)
+        }
+    }
+}
+
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.10.01"))
     implementation("androidx.core:core-ktx:1.17.0")
@@ -70,6 +90,8 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.38.1")
+    implementation("com.mikepenz:multiplatform-markdown-renderer-coil2:0.38.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20250517")
