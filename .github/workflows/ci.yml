@@ -3,10 +3,16 @@ name: Android CI
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
   workflow_dispatch:
 
 permissions:
@@ -26,41 +32,86 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
+          fetch-depth: 0
           persist-credentials: false
 
+      - name: Determine whether CI is required
+        id: filter
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          SKIP_CI: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'skip-ci') }}
+        shell: bash
+        run: |
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+          if [[ "$SKIP_CI" == "true" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "CI skipped by maintainer label."
+            exit 0
+          fi
+
+          if [[ "$EVENT" == "workflow_dispatch" ]]; then
+            exit 0
+          fi
+
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            exit 0
+          fi
+
+          if ! git diff --name-only --no-renames -z "$BASE_SHA" HEAD > "$RUNNER_TEMP/changed-files"; then
+            exit 1
+          fi
+
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              README.md|CHANGELOG.md|CONTRIBUTING.md|SECURITY.md|CODE_OF_CONDUCT.md|docs/*|screenshots/*|.github/ISSUE_TEMPLATE/*|.github/PULL_REQUEST_TEMPLATE.md)
+                ;;
+              *)
+                echo "Build-relevant change detected."
+                exit 0
+                ;;
+            esac
+          done < "$RUNNER_TEMP/changed-files"
+
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "Documentation-only changes. CI skipped."
+
       - name: Set up Java 17
+        if: steps.filter.outputs.skip == 'false'
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
 
       - name: Set up Gradle
+        if: steps.filter.outputs.skip == 'false'
         uses: gradle/actions/setup-gradle@v4
 
       - name: Set up Android SDK
+        if: steps.filter.outputs.skip == 'false'
         uses: android-actions/setup-android@v4.0.3
         with:
           packages: "platform-tools platforms;android-36 build-tools;36.0.0"
 
-      - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
-
       - name: Make Gradle wrapper executable
+        if: steps.filter.outputs.skip == 'false'
         run: chmod +x gradlew
 
       - name: Run unit tests
+        if: steps.filter.outputs.skip == 'false'
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: Run Android Lint
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.filter.outputs.skip == 'false' }}
         run: ./gradlew lintDebug --stacktrace
 
       - name: Build debug APK
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.filter.outputs.skip == 'false' }}
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload unit test reports
-        if: always()
+        if: ${{ always() && steps.filter.outputs.skip == 'false' }}
         uses: actions/upload-artifact@v6
         with:
           name: unit-test-reports
@@ -70,7 +121,7 @@ jobs:
           retention-days: 7
 
       - name: Upload lint reports
-        if: always()
+        if: ${{ always() && steps.filter.outputs.skip == 'false' }}
         uses: actions/upload-artifact@v6
         with:
           name: lint-reports
@@ -78,10 +129,14 @@ jobs:
           retention-days: 7
 
       - name: Upload debug APK
-        if: success()
+        if: ${{ success() && steps.filter.outputs.skip == 'false' }}
         uses: actions/upload-artifact@v6
         with:
           name: GymManeScanner-debug
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 7
+
+      - name: CI skipped
+        if: steps.filter.outputs.skip == 'true'
+        run: echo "No Android checks required for this run."
