@@ -1,0 +1,18 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: "📖 Documentation"
+    url: https://github.com/KingMezzo/GymMane-Scanner#readme
+    about: Read the installation guide and project documentation.
+
+  - name: "📥 Latest Release"
+    url: https://github.com/KingMezzo/GymMane-Scanner/releases/latest
+    about: Download the latest version of GymMane Scanner.
+
+  - name: "🔍 Search Existing Issues"
+    url: https://github.com/KingMezzo/GymMane-Scanner/issues?q=is%3Aissue
+    about: Check whether your issue has already been reported.
+
+  - name: "🏋️ GymMane Repository"
+    url: https://github.com/InlitX/GymMane
+    about: Report issues related to GymMane itself.
