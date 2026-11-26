@@ -1,4 +1,20 @@
 # 📷 GymMane-Scanner
+[![Latest Release](https://img.shields.io/github/v/release/KingMezzo/GymMane-Scanner?style=flat-square&logo=github&label=Release)](../../releases/latest)
+[![Total Downloads](https://img.shields.io/github/downloads/KingMezzo/GymMane-Scanner/total?style=flat-square&color=brightgreen&label=Downloads)](../../releases)
+[![Latest Release Downloads](https://img.shields.io/github/downloads/KingMezzo/GymMane-Scanner/latest/total?style=flat-square&label=Latest%20Downloads)](../../releases/latest)
+[![Android CI](https://github.com/KingMezzo/GymMane-Scanner/actions/workflows/ci.yml/badge.svg?branch=main)](../../actions/workflows/ci.yml)
+[![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)](../../releases/latest)
+[![License](https://img.shields.io/github/license/KingMezzo/GymMane-Scanner?style=flat-square)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/KingMezzo/GymMane-Scanner?style=flat-square&color=yellow)](../../stargazers)
+
+[![Download latest APK](https://img.shields.io/badge/DOWNLOAD-LATEST%20APK-238636?style=for-the-badge&logo=android&logoColor=white)](../../releases/latest)
+
+
+[Report a Bug](../../issues/new/choose) ·
+[Request a Feature](../../issues/new/choose) ·
+[View Releases](../../releases) ·
+[View Source Code](../../tree/main)
+
 Food barcode scanner app for GymMane. Scans product barcodes, retrieves nutritional data, and imports them directly into GymMane as new food entries.
 
 ---
