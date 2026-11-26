@@ -1,0 +1,82 @@
+name: "✨ Feature Request"
+description: Suggest a new feature or improvement.
+title: "[Feature]: "
+type: Enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for sharing your ideas!
+        Your feedback helps improve GymMane Scanner.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have searched for similar feature requests.
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature category
+      multiple: true
+      options:
+        - Barcode Scanner
+        - Product Information
+        - GymMane Integration
+        - User Interface
+        - Accessibility
+        - Scan History
+        - Offline Functionality
+        - Settings
+        - Performance
+        - Privacy and Security
+        - App Updates
+        - Translations
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or motivation
+      description: What problem would this feature solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe your idea and how it should work.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative solutions
+      description: Have you considered any alternative approaches?
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Screenshots or mockups
+      description: Attach design ideas or examples if available.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Community contribution
+      options:
+        - label: I would be willing to test this feature.
+        - label: I would be willing to help implement this feature.
