@@ -1,0 +1,59 @@
+name: "💬 Question"
+description: Ask a question about GymMane Scanner.
+title: "[Question]: "
+type: Question
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about GymMane Scanner?
+        We are happy to help.
+
+        Please check the README and existing issues first.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have checked the README.
+          required: true
+        - label: I have searched for similar questions.
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Topic
+      options:
+        - Installation
+        - General Usage
+        - GymMane Integration
+        - Product Information
+        - App Updates
+        - Privacy and Security
+        - Development
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: GymMane Scanner version
+      placeholder: "e.g. 2.1.0"
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What would you like to know?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Provide any relevant information or screenshots.
