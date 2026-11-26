@@ -1,0 +1,66 @@
+name: "📚 Documentation"
+description: Report missing, incorrect or outdated documentation.
+title: "[Docs]: "
+type: Documentation
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us keep the GymMane Scanner documentation
+        accurate and accessible.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have searched for existing documentation issues.
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Documentation category
+      options:
+        - README
+        - Installation Guide
+        - User Instructions
+        - Release Notes
+        - Developer Documentation
+        - Privacy Information
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Affected file or page
+      placeholder: "e.g. README.md - Installation"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
+      description: What information is missing, incorrect or unclear?
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested improvement
+      description: How could the documentation be improved?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to update the documentation myself.
