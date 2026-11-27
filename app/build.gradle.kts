@@ -7,6 +7,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+val unsignedRelease = providers.gradleProperty("unsignedRelease").map { it.toBoolean() }.getOrElse(false)
+
 val releaseSigningFile = rootProject.file("keystore.properties")
 val releaseSigning = Properties().apply {
     if (releaseSigningFile.isFile) {
@@ -42,7 +44,7 @@ android {
     }
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (unsignedRelease) null else signingConfigs.getByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -106,6 +108,7 @@ dependencies {
 
 // Validate only release signing; debug builds do not need private credentials.
 tasks.matching { it.name == "validateSigningRelease" }.configureEach {
+    onlyIf { !unsignedRelease }
     doFirst {
         check(releaseSigningFile.isFile) {
             "Release signing: create keystore.properties from keystore.properties.example."
