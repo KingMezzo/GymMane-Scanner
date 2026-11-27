@@ -1,19 +1,7 @@
-import com.android.build.api.artifact.SingleArtifact
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-}
-
-val unsignedRelease = providers.gradleProperty("unsignedRelease").map { it.toBoolean() }.getOrElse(false)
-
-val releaseSigningFile = rootProject.file("keystore.properties")
-val releaseSigning = Properties().apply {
-    if (releaseSigningFile.isFile) {
-        releaseSigningFile.reader(Charsets.UTF_8).use { load(it) }
-    }
 }
 
 android {
@@ -33,18 +21,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    signingConfigs {
-        create("release") {
-            val keyPath = releaseSigning.getProperty("storeFile").orEmpty()
-            if (keyPath.isNotBlank()) storeFile = rootProject.file(keyPath)
-            storePassword = releaseSigning.getProperty("storePassword").orEmpty()
-            keyAlias = releaseSigning.getProperty("keyAlias").orEmpty()
-            keyPassword = releaseSigning.getProperty("keyPassword").orEmpty()
-        }
-    }
     buildTypes {
         release {
-            signingConfig = if (unsignedRelease) null else signingConfigs.getByName("release")
+            // GitHub Actions signs the unsigned APK in its separate signing job.
+            signingConfig = null
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -54,25 +34,6 @@ android {
 }
 
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
-
-// Export each assembled release to the project root, retaining earlier versions.
-androidComponents {
-    onVariants(selector().withBuildType("release")) { variant ->
-        val versionName = variant.outputs.single().versionName
-        val exportApk = tasks.register<Copy>("exportReleaseApk") {
-            group = "build"
-            description = "Copies the release APK to releases with its version in the filename."
-            from(variant.artifacts.get(SingleArtifact.APK)) {
-                include("*.apk")
-                rename { "GymManeScanner-${versionName.get()}-release.apk" }
-            }
-            into(rootProject.layout.projectDirectory.dir("releases"))
-        }
-        tasks.matching { it.name == "assembleRelease" }.configureEach {
-            dependsOn(exportApk)
-        }
-    }
-}
 
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.10.01"))
@@ -105,21 +66,3 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
-
-// Validate only release signing; debug builds do not need private credentials.
-tasks.matching { it.name == "validateSigningRelease" }.configureEach {
-    onlyIf { !unsignedRelease }
-    doFirst {
-        check(releaseSigningFile.isFile) {
-            "Release signing: create keystore.properties from keystore.properties.example."
-        }
-        val required = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
-        check(required.all { !releaseSigning.getProperty(it).isNullOrBlank() }) {
-            "Release signing: fill in storeFile, storePassword, keyAlias and keyPassword in keystore.properties."
-        }
-        check(rootProject.file(releaseSigning.getProperty("storeFile")).isFile) {
-            "Release signing: the configured keystore file does not exist."
-        }
-    }
-}
-
