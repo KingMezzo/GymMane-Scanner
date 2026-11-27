@@ -41,17 +41,9 @@ body:
       required: true
 
   - type: textarea
-    id: problem
+    id: feature_request
     attributes:
-      label: Problem or motivation
-      description: What problem would this feature solve?
-    validations:
-      required: true
-
-  - type: textarea
-    id: solution
-    attributes:
-      label: Proposed solution
+      label: Feature request
       description: Describe your idea and how it should work.
     validations:
       required: true
