@@ -1,5 +1,5 @@
 name: "🐛 Bug Report"
-description: Report a bug or unexpected behavior in GymMane Scanner.
+description: Report a bug or unexpected behavior.
 title: "[Bug]: "
 type: Bug
 
@@ -7,21 +7,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting a bug!
-        Please provide enough information to help us reproduce the issue.
-
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Before submitting
-      options:
-        - label: I have searched for existing issues.
-          required: true
-        - label: I have checked whether a newer app version is available.
-          required: true
+        Thanks for reporting a bug! ❤️
 
   - type: input
-    id: scanner-version
+    id: app-version
     attributes:
       label: GymMane Scanner version
       placeholder: "e.g. 2.1.0"
@@ -29,87 +18,16 @@ body:
       required: true
 
   - type: input
-    id: gymmane-version
-    attributes:
-      label: GymMane version
-      description: Required if the issue affects GymMane integration.
-      placeholder: "e.g. 2.4.0"
-
-  - type: input
     id: device
     attributes:
-      label: Device model
-      placeholder: "e.g. Google Pixel 9"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: android-version
-    attributes:
-      label: Android version
-      options:
-        - "Android 17"
-        - "Android 16"
-        - "Android 15"
-        - "Android 14"
-        - "Android 13"
-        - "Android 12 / 12L"
-        - "Android 11"
-        - "Android 10"
-        - "Android 9"
-        - "Android 8 / 8.1"
-        - "Other / Unknown"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: component
-    attributes:
-      label: Affected component
-      multiple: true
-      options:
-        - Barcode Scanner
-        - Camera
-        - Open Food Facts
-        - GymMane Integration
-        - Manual Entry
-        - Scan History
-        - Offline Cache
-        - Settings
-        - App Updates
-        - Installation
-        - User Interface
-        - Translations
-        - Other
-    validations:
-      required: true
-
-  - type: dropdown
-    id: frequency
-    attributes:
-      label: Frequency
-      options:
-        - Every time
-        - Frequently
-        - Occasionally
-        - Only once
-        - Unknown
-    validations:
-      required: true
+      label: Device and Android version
+      placeholder: "e.g. Google Pixel 9, Android 16"
 
   - type: textarea
-    id: actual-behavior
+    id: description
     attributes:
-      label: Actual behavior
-      description: What happened?
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected-behavior
-    attributes:
-      label: Expected behavior
-      description: What should have happened instead?
+      label: Describe the bug
+      description: What happened and what did you expect?
     validations:
       required: true
 
@@ -117,42 +35,10 @@ body:
     id: reproduction
     attributes:
       label: Steps to reproduce
-      placeholder: |
-        1. Open GymMane Scanner
-        2. Scan a product
-        3. ...
-        4. Observe the issue
-    validations:
-      required: true
-
-  - type: input
-    id: barcode
-    attributes:
-      label: Product barcode
-      description: If the issue affects a specific product.
-
-  - type: textarea
-    id: attachments
-    attributes:
-      label: Screenshots or recordings
-      description: Attach relevant screenshots or recordings.
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant logs
-      description: Remove any personal or sensitive information.
-      render: text
+      description: How can I reproduce the issue?
 
   - type: textarea
     id: additional-context
     attributes:
-      label: Additional context
-
-  - type: checkboxes
-    id: privacy
-    attributes:
-      label: Privacy confirmation
-      options:
-        - label: My report does not contain personal or sensitive information.
-          required: true
+      label: Additional information
+      description: Add screenshots, barcodes, logs or anything helpful. Please remove sensitive information.
